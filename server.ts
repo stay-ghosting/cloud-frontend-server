@@ -1,15 +1,21 @@
 import express from 'express';
 import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3001;
+if (!process.env.PORT) {
+  throw new Error("Missing PORT")
+}
 
-// Serve static files from the React app's build folder
-app.use(express.static(path.join(__dirname, '../react-app/dist')));
+const port = process.env.PORT
 
-// Handle all other routes and send index.html (for React Router support)
+
+app.use(express.static(path.join(__dirname, '/dist')));
+
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../react-app/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '/dist', 'index.html'));
 });
 
 app.listen(port, () => {
